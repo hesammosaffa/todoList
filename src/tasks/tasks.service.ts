@@ -19,6 +19,9 @@ export class TasksService {
   }
 
   private getAllTasksParent(): Task[] {
+    if(!this.tasks.length){
+      throw new NotFoundException("Task is empty")
+    }
     return this.tasks;
   }
 
@@ -60,11 +63,8 @@ export class TasksService {
   }
 
   deleteTaskById(id: string): string {
-    const taskIndex = this.tasks.findIndex((task) => task.id);
-    if (taskIndex == -1) {
-      return `Task with ID "${id}" not found`;
-    }
-    this.tasks.splice(taskIndex, 1);
+    const found = this.getTaskById(id);
+    this.tasks = this.tasks.filter((task) => task.id != found.id) 
     return `Task with ID "${id}" has been deleted`;
   }
 
